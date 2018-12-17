@@ -22,19 +22,13 @@ contract StarNotary is ERC721Token {
 
       // Check uniqueness of star co-ordinates
       string memory currStarCoordinates = strConcat(_ra,_dec,_mag);
-      if(starCoordinatesUsed[currStarCoordinates] == false) 
-      {
-        starCoordinatesUsed[currStarCoordinates] = true;
+      require(starCoordinatesUsed[currStarCoordinates] == false, "Star co-ordinates not unique");
+      starCoordinatesUsed[currStarCoordinates] = true;
 
-        // Create a `Star memory newStar` variable
-        Star memory newStar = Star(_name,_starStory,_ra,_dec,_mag);
-        tokenIdToStarInfo[_tokenId] = newStar;
-        ERC721Token.mint(_tokenId);
-      }
-      else
-      {
-          throw;
-      }
+      // Create a `Star memory newStar` variable
+      Star memory newStar = Star(_name,_starStory,_ra,_dec,_mag);
+      tokenIdToStarInfo[_tokenId] = newStar;
+      ERC721Token.mint(_tokenId);           
     }
 
     function putStarUpForSale(uint256 _tokenId, uint256 _price) public { 
@@ -43,9 +37,12 @@ contract StarNotary is ERC721Token {
         starsForSale[_tokenId] = _price;
     }
 
-    function checkIfStarExist(string _ra, string _dec, string _mag) public returns (bool) {
+    function checkIfStarExist(string _ra, string _dec, string _mag) public view returns (bool) {
         string memory currStarCoordinates = strConcat(_ra,_dec,_mag);
-        return starCoordinatesUsed[currStarCoordinates];
+        if(starCoordinatesUsed[currStarCoordinates] == true)
+            return true;
+        else 
+            return false;        
     }
 
     function buyStar(uint256 _tokenId) public payable { 
@@ -76,7 +73,7 @@ contract StarNotary is ERC721Token {
     }
 
     // Reference: https://github.com/oraclize/ethereum-api/blob/master/oraclizeAPI_0.5.sol
-    function strConcat(string _a, string _b, string _c) internal returns (string){
+    function strConcat(string _a, string _b, string _c) pure internal returns (string){
         bytes memory _ba = bytes(_a);
         bytes memory _bb = bytes(_b);
         bytes memory _bc = bytes(_c);

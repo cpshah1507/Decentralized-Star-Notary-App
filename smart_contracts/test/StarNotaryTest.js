@@ -116,6 +116,20 @@ contract('StarNotary', accounts => {
                 assert.equal(balanceOfUser2BeforeTransaction.sub(balanceAfterUser2BuysStar), starPrice)
             })
         })
+
+        describe('check if star exists', () => {           
+            let testra = "test_ra_1"
+            let testdec = "test_dec_1"
+            let testmag = "test_mag_1"
+
+            it('star does not exist if it has not been created yet', async function () {                                
+                assert.equal(await this.contract.checkIfStarExist(testra,testdec,testmag), false)
+            })
+
+            it('star exists if it has been created', async function () {                                
+                assert.equal(await this.contract.checkIfStarExist(ra,dec,mag), true)
+            })
+        })
     })
 
     var expectThrow = async function(promise) { 

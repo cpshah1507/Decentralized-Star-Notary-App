@@ -56,8 +56,12 @@ contract ERC721Token is ERC721 {
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
     /// @param data Additional data with no specified format, sent in call to `_to`
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes data) external payable { 
-        // WILL NOT IMPLEMENT
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes data) external payable hasPermission(msg.sender, _tokenId) {         
+        // Check if _from is current owner
+        require(tokenToOwner[_tokenId] == _from,"From account is not current owner of token");
+        // Check if _to is not zero address
+        require(_to != address(0), "To account address is zero");        
+        transferFromHelper(_from, _to, _tokenId);
     }
 
     /// @notice Transfers the ownership of an NFT from one address to another address
@@ -66,8 +70,13 @@ contract ERC721Token is ERC721 {
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId) external payable { 
-        // WILL NOT IMPLEMENT
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId) external payable hasPermission(msg.sender, _tokenId) { 
+        // Check if _from is current owner
+        require(tokenToOwner[_tokenId] == _from,"From account is not current owner of token");
+        // Check if _to is not zero address
+        require(_to != address(0), "To account address is zero");
+
+        transferFromHelper(_from, _to, _tokenId);
     }
 
     /// @notice Transfer ownership of an NFT -- THE CALLER IS RESPONSIBLE

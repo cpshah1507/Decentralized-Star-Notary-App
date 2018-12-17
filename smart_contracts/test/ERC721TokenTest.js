@@ -61,6 +61,35 @@ contract('ERC721Token', accounts => {
         })
     })
 
+    describe('can safe transfer token', () => { 
+        let tokenId = 1
+        let tx 
+
+        beforeEach(async function () { 
+            await this.contract.mint(tokenId, {from: user1})
+
+            tx = await this.contract.safeTransferFrom(user1, user2, tokenId, {from: user1})
+        })
+
+        it('token has new owner', async function () { 
+            assert.equal(await this.contract.ownerOf(tokenId), user2)
+        })
+
+        it('emits the correct event', async function () { 
+            assert.equal(tx.logs[0].event, 'Transfer')
+            assert.equal(tx.logs[0].args._tokenId, tokenId)
+            assert.equal(tx.logs[0].args._to, user2)
+            assert.equal(tx.logs[0].args._from, user1)
+        })
+
+        it('only permissioned users can safe transfer tokens', async function() { 
+            let randomPersonTryingToStealTokens = accounts[4]
+
+            await expectThrow(this.contract.safeTransferFrom(user1, randomPersonTryingToStealTokens, tokenId, {from: randomPersonTryingToStealTokens}))
+        })
+    })
+
+
     describe('can grant approval to transfer', () => { 
         let tokenId = 1
         let tx 
