@@ -1,0 +1,11 @@
+StarNotary contract has been deployed to Rinkeby network.
+
+Contract address: 0x740955EFee65f9cD07EE9Ed94D523219f5cb2b91
+Transaction hash: 0xc66b379dca30f5b7628d2fb1b6249ca4e59236037a20ebf9526dcf7d91178c1f
+Link to rinkeby etherscan for this contract: https://rinkeby.etherscan.io/address/0x740955efee65f9cd07ee9ed94d523219f5cb2b91
+
+Created a star by executing createStar method of this contract:
+Transaction hash: 0x20842c41e88160a7bccff993753fcc2bb7b6f309478c4388bf50de8db8813e72
+
+Put the star up for sale by executing putStarUpForSale method of this contract:
+Transaction hash: 0xb086bf08b216647d8113c5099cf09b3c463f23bcd200a6d8e0d3875f84325432
