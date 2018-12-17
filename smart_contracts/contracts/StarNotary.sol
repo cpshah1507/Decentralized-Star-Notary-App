@@ -6,24 +6,46 @@ contract StarNotary is ERC721Token {
 
     struct Star { 
         string name;
+        string starStory;
+        string ra;
+        string dec;
+        string mag;
     }
     
     mapping(uint256 => Star) public tokenIdToStarInfo;
-
     mapping(uint256 => uint256) public starsForSale;
+    mapping(string => bool) starCoordinatesUsed;
 
-    function createStar(string _name, uint256 _tokenId) public { 
-        Star memory newStar = Star(_name);
+    function createStar(string _name, string _starStory, string _ra, string _dec, string _mag, uint256 _tokenId) public {
+      
+      // Verify uniquenessFactor `keccak256(_ra, _dec, _mag)`
 
+      // Check uniqueness of star co-ordinates
+      string memory currStarCoordinates = strConcat(_ra,_dec,_mag);
+      if(starCoordinatesUsed[currStarCoordinates] == false) 
+      {
+        starCoordinatesUsed[currStarCoordinates] = true;
+
+        // Create a `Star memory newStar` variable
+        Star memory newStar = Star(_name,_starStory,_ra,_dec,_mag);
         tokenIdToStarInfo[_tokenId] = newStar;
-
         ERC721Token.mint(_tokenId);
+      }
+      else
+      {
+          throw;
+      }
     }
 
     function putStarUpForSale(uint256 _tokenId, uint256 _price) public { 
         require(this.ownerOf(_tokenId) == msg.sender);
 
         starsForSale[_tokenId] = _price;
+    }
+
+    function checkIfStarExist(string _ra, string _dec, string _mag) public returns (bool) {
+        string memory currStarCoordinates = strConcat(_ra,_dec,_mag);
+        return starCoordinatesUsed[currStarCoordinates];
     }
 
     function buyStar(uint256 _tokenId) public payable { 
@@ -51,5 +73,19 @@ contract StarNotary is ERC721Token {
 
         //clear being on sale 
         starsForSale[_tokenId] = 0;
+    }
+
+    // Reference: https://github.com/oraclize/ethereum-api/blob/master/oraclizeAPI_0.5.sol
+    function strConcat(string _a, string _b, string _c) internal returns (string){
+        bytes memory _ba = bytes(_a);
+        bytes memory _bb = bytes(_b);
+        bytes memory _bc = bytes(_c);
+        string memory abc = new string(_ba.length + _bb.length + _bc.length);
+        bytes memory babc = bytes(abc);
+        uint k = 0;
+        for (uint i = 0; i < _ba.length; i++) babc[k++] = _ba[i];
+        for (i = 0; i < _bb.length; i++) babc[k++] = _bb[i];
+        for (i = 0; i < _bc.length; i++) babc[k++] = _bc[i];
+        return string(babc);
     }
 }
