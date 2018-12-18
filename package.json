@@ -1,0 +1,24 @@
+{
+  "name": "Decentralized-Star-Notary-App",
+  "version": "1.0.0",
+  "description": "Decentralized App on Ethereum blockchain for star notary service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cpshah1507/Decentralized-Star-Notary-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cpshah1507/Decentralized-Star-Notary-App/issues"
+  },
+  "homepage": "https://github.com/cpshah1507/Decentralized-Star-Notary-App#readme",
+  "dependencies": {
+    "lite-server": "^2.4.0"
+  }
+}
