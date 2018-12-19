@@ -25,9 +25,8 @@ contract StarNotary is ERC721Token {
       require(starCoordinatesUsed[currStarCoordinates] == false, "Star co-ordinates not unique");
       starCoordinatesUsed[currStarCoordinates] = true;
 
-      // Create a `Star memory newStar` variable
-      Star memory newStar = Star(_name,_starStory,_ra,_dec,_mag);
-      tokenIdToStarInfo[_tokenId] = newStar;
+      // Create a `Star memory newStar` variable      
+      tokenIdToStarInfo[_tokenId] = Star(_name,_starStory,_ra,_dec,_mag);
       ERC721Token.mint(_tokenId);           
     }
 
